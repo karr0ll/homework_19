@@ -1,6 +1,5 @@
-class Config(object):
-    DEBUG = True
-    SECRET_HERE = '249y823r9v8238r9u'
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///./movies.db'
+class Config:
+    DEBUG = False
+    SQLALCHEMY_DATABASE_URI = 'sqlite:////Users/kirill/PycharmProjects/sky_pro_lessons/homework_19/movies.db'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 

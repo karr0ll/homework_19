@@ -1,3 +1,5 @@
+from sqlalchemy import func
+
 from dao.model.genre import Genre
 
 
@@ -5,26 +7,44 @@ class GenreDAO:
     def __init__(self, session):
         self.session = session
 
-    def get_one(self, bid):
-        return self.session.query(Genre).get(bid)
-
     def get_all(self):
-        return self.session.query(Genre).all()
+        """
+        загружает список всех жанров
+        """
+        genres_list = self.session.query(Genre).all()
+        return genres_list
 
-    def create(self, genre_d):
-        ent = Genre(**genre_d)
-        self.session.add(ent)
-        self.session.commit()
-        return ent
+    def get_one(self, gid):
+        """
+        загружает данные одного жанра
+        """
+        genre = self.session.query(Genre).get(gid)
+        return genre
 
-    def delete(self, rid):
-        genre = self.get_one(rid)
-        self.session.delete(genre)
-        self.session.commit()
+    def get_genre(self, data):
+        """
+        загружает жанр для дальнейшего получения его id
+        """
+        genre = self.session.query(Genre).filter(Genre.name == data)
+        print(genre)
+        return genre
 
-    def update(self, genre_d):
-        genre = self.get_one(genre_d.get("id"))
-        genre.name = genre_d.get("name")
 
-        self.session.add(genre)
+    def get_max_id(self):
+        """
+        получает последний id
+        """
+        max_id = self.session.query(Genre, func.max(Genre.id)).one()
+
+        return max_id
+
+    def create(self, genre_id, genre_name):
+        """
+        создает новый жанр
+        """
+        new_genre = Genre(
+            id=genre_id,
+            name=genre_name
+        )
+        self.session.add(new_genre)
         self.session.commit()
